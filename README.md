@@ -2,7 +2,7 @@
 
 ### Why?
 
-Checking authorization to resources in web-apps usually gets messy, your beautiful succint RESTful API ends up looking like it went through deep spaghettization once you're done applying all the auth logic.
+Checking authorization to resources in web-apps usually gets messy.  Your beautiful succint RESTful API ends up looking like it went through deep spaghettization once you're done applying all the auth logic.
 
 Usually, something like:
 
@@ -108,10 +108,12 @@ Parameters
 * __errorMessage__ - if the check fails, this error message will be returned to
 the user like ```{"message": "<errorMessage>"}```
 
-#### Returns: function
+Returns: function
+
 __predicateFactory__ returns a function which you can use to wrap your controller methods to decorate them with the permissions checking functionality.
 
 __Example__
+
 ```js
 let isLoggedIn = predicateFactory(function() { /* ... */}, 401, 'Must be logged in');
 app.use(isLoggedIn(controllers.home))
