@@ -2,7 +2,7 @@
 
 ### Why?
 
-Checking authorization to resources in web-apps usually gets messy, your beautiful succint RESTful API ends up looking like it went through deep spaghettization once you're done applying all the auth logic. 
+Checking authorization to resources in web-apps usually gets messy, your beautiful succint RESTful API ends up looking like it went through deep spaghettization once you're done applying all the auth logic.
 
 Usually, something like:
 
@@ -43,7 +43,7 @@ app.use(router.post('/article', createArticle));
 What's worse is that you end up redoing this permission checking mess over and over again with small changes.  Great place to use the factory pattern. Wouldn't it be nicer to:
 
 ```js
-function *_postArticle() {
+function *postArticle() {
     // .. code ..
 }
 app.use(router.post('/article', canCreateArticle(postArticle)));
@@ -97,9 +97,22 @@ function *getResource() {
 app.listen(8000);
 ```
 
+### API
 
+#### predicateFactory(compareFn, errorCode, errorMessage)
 
+Parameters
 
+* __compareFn__ - a function that return true if the request should be processed
+* __errorCode__ - an HTTP code to return if the check fails, i.e 403, 401, etc
+* __errorMessage__ - if the check fails, this error message will be returned to
+the user like ```{"message": "<errorMessage>"}```
 
+#### Returns: function
+__predicateFactory__ returns a function which you can use to wrap your controller methods to decorate them with the permissions checking functionality.
 
-
+__Example__
+```js
+let isLoggedIn = predicateFactory(function() { /* ... */}, 401, 'Must be logged in');
+app.use(isLoggedIn(controllers.home))
+```
